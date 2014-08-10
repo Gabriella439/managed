@@ -40,10 +40,10 @@
 > import System.IO
 >
 > inFile :: FilePath -> Managed Handle
-> inFile filePath = Managed (withFile filePath ReadMode)
+> inFile filePath = managed (withFile filePath ReadMode)
 >
 > outFile :: FilePath -> Managed Handle
-> outFile filePath = Managed (withFile filePath WriteMode)
+> outFile filePath = managed (withFile filePath WriteMode)
 >
 > main = runManaged $ do
 >     inHandle  <- inFile "inFile.txt"
@@ -53,8 +53,8 @@
     ... or you can just wrap things inline:
 
 > main = runManaged $ do
->     inHandle  <- Managed (withFile "inFile.txt" ReadMode)
->     outHandle <- Managed (withFile "outFile.txt" WriteMode)
+>     inHandle  <- managed (withFile "inFile.txt" ReadMode)
+>     outHandle <- managed (withFile "outFile.txt" WriteMode)
 >     liftIO (copy inHandle outHandle)
 
     Additionally, since `Managed` is a `Monad`, you can take advantage of all
