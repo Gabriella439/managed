@@ -27,7 +27,7 @@ to split this type out into a small and separate library.
 
 Install the [Haskell Platform](http://www.haskell.org/platform/) and run:
 
-    cabal install managed pipes
+    $ cabal install managed pipes
 
 Then compile and run the following small program which copies `"inFile.txt"` to
 `"outFile.txt"`:
