@@ -80,7 +80,11 @@ module Control.Monad.Managed (
     Managed,
     managed,
     with,
-    runManaged
+    runManaged,
+
+    -- * Re-exports
+    -- $reexports
+    module Control.Monad.IO.Class
     ) where
 
 import Control.Applicative (Applicative(pure, (<*>)), liftA2)
@@ -168,3 +172,7 @@ with = (>>-)
 -- | Run a `Managed` computation, enforcing that no acquired resources leak
 runManaged :: Managed () -> IO ()
 runManaged m = m >>- return
+
+{- $reexports
+    "Control.Monad.IO.Class" re-exports 'MonadIO'
+-}
