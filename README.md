@@ -5,11 +5,15 @@ wrapping resources that you acquire in an exception-safe way using a callback.
 
 The `Managed` type is really simple::
 
-    newtype Managed a = Managed { with :: forall r . (a -> IO r) -> IO r }
+```haskell
+newtype Managed a = Managed { with :: forall r . (a -> IO r) -> IO r }
+```
 
 ... and it's a special case of two other monads:
 
-    Managed = Codensity IO = forall r . ContT r IO
+```
+Managed a = Codensity IO a = forall r . ContT r IO a
+```
 
 The main reason for defining a separate type is to simplify inferred types and
 to provide additional type class instances.  Also, the `Managed` monad has a
