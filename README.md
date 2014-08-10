@@ -1,8 +1,7 @@
 # managed v1.0.0
 
-This library contains the `Managed` `Monad`, which is a small building block
-for wrapping resources that you acquire in an exception-safe way using a
-callback.
+This library contains the `Managed` monad, which is a small building block for
+wrapping resources that you acquire in an exception-safe way using a callback.
 
 The `Managed` type is really simple::
 
@@ -16,24 +15,37 @@ The main reason for defining a separate type is to simplify inferred types and
 to provide additional type class instances.  Also, the `Managed` monad has a
 less intimidating name so I feel more comfortable using it to teach beginners.
 
-## Example
+The most useful feature of `Managed` is that it automatically lifts the `Monoid`
+and `Num` type classes.  All `Applicative`s can auto-lift these two type classes
+and by chaining `Applicative`s you can extend types with new functionality while
+still preserving their `Monoid` and `Num` operations.
 
-* Install the [Haskell Platform](http://www.haskell.org/platform/)
-* `cabal install managed pipes`
+This type was popularized by the `mvc` library, and I received several requests
+to split this type out into a small and separate library.
 
-Here's a simple program using the `Managed` monad:
+## Quick Example
 
-    import Control.Monad.Managed
-    import System.IO
-    import Pipes
-    import qualified Pipes.Prelude
+Install the [Haskell Platform](http://www.haskell.org/platform/) and run:
 
-    main = runManaged $ do
-        hIn  <- Managed (withFile "inFile.txt" ReadMode)
-        hOut <- Managed (withFile "outFile.txt" WriteMode)
-        liftIO $ runEffect $ Pipes.fromhandle hIn >-> Pipes.toHandle hOut
+    cabal install managed pipes
 
-Read the documentation in the `Control.Monad.Managed` module for more details.
+Then compile and run the following small program which copies `"inFile.txt"` to
+`"outFile.txt"`:
+
+```haskell
+import Control.Monad.Managed
+import System.IO
+import Pipes
+import qualified Pipes.Prelude as Pipes
+
+main = runManaged $ do
+    hIn  <- managed (withFile "inFile.txt" ReadMode)
+    hOut <- managed (withFile "outFile.txt" WriteMode)
+    liftIO $ runEffect $ Pipes.fromHandle hIn >-> Pipes.toHandle hOut
+```
+
+Read the documentation in the `Control.Monad.Managed` module to learn more about
+how to use the `Managed` type.
 
 ## Development Status
 
