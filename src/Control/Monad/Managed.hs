@@ -62,7 +62,7 @@
     `Foreign.Marshal.Utils.withMany` function from "Foreign.Marshal.Utils"
     becomes a trivial wrapper around `mapM`:
 
-> withMany :: (a -> (b -> IO r) -> IOr ) -> [a] -> ([b] -> IO r) -> IO r
+> withMany :: (a -> (b -> IO r) -> IO r) -> [a] -> ([b] -> IO r) -> IO r
 > withMany f = with . mapM (Managed . f)
 
     Another reason to use `Managed` is that if you wrap a `Monoid` value in
