@@ -79,6 +79,7 @@ module Control.Monad.Managed (
     -- * Managed
     Managed,
     managed,
+    managed_,
     with,
     runManaged,
 
@@ -164,6 +165,10 @@ instance Floating a => Floating (Managed a) where
 -- | Build a `Managed` value
 managed :: (forall r . (a -> IO r) -> IO r) -> Managed a
 managed = Managed
+
+-- | Like 'managed' but for resource-less operations.
+managed_ :: (forall r. IO r -> IO r) -> Managed ()
+managed_ f = managed $ \g -> f $ g ()
 
 -- | Acquire a `Managed` value
 with :: Managed a -> (a -> IO r) -> IO r
