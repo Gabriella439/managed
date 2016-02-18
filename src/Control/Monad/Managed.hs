@@ -73,6 +73,23 @@
     This lets you combine managed resources transparently.  You can also lift
     operations from some numeric type classes this way, too, such as the `Num`
     type class.
+
+    NOTE: `Managed` may leak space if used in an infinite loop like this
+    example:
+
+> import Control.Monad
+> import Control.Monad.Managed
+> 
+> main = runManaged (forever (liftIO (print 1)))
+
+    If you need to acquire a resource for a long-lived loop, you can instead
+    acquire the resource first and run the loop in `IO`, using either of the
+    following two equivalent idioms:
+
+> with resource (\r -> forever (useThe r))
+>
+> do r <- resource
+>    liftIO (forever (useThe r))
 -}
 
 module Control.Monad.Managed (
