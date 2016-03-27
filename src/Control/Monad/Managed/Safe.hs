@@ -17,6 +17,7 @@
 module Control.Monad.Managed.Safe (
     -- * Managed
     Managed,
+    MonadManaged(..),
     managed,
     managed_,
     runManaged,
@@ -27,7 +28,8 @@ module Control.Monad.Managed.Safe (
     ) where
 
 import Control.Monad.IO.Class (MonadIO(liftIO))
-import Control.Monad.Managed (Managed, managed, managed_, runManaged)
+import Control.Monad.Managed
+    (Managed, MonadManaged(..), managed, managed_, runManaged)
 
 {- $reexports
     "Control.Monad.IO.Class" re-exports 'MonadIO'

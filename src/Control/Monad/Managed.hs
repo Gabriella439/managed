@@ -95,6 +95,7 @@
 module Control.Monad.Managed (
     -- * Managed
     Managed,
+    MonadManaged(..),
     managed,
     managed_,
     with,
@@ -107,7 +108,20 @@ module Control.Monad.Managed (
 
 import Control.Applicative (Applicative(pure, (<*>)), liftA2)
 import Control.Monad.IO.Class (MonadIO(liftIO))
+import Control.Monad.Trans.Class (lift)
 import Data.Monoid (Monoid(mempty, mappend))
+
+import qualified Control.Monad.Trans.Cont          as Cont
+import qualified Control.Monad.Trans.Except        as Except
+import qualified Control.Monad.Trans.Identity      as Identity
+import qualified Control.Monad.Trans.Maybe         as Maybe
+import qualified Control.Monad.Trans.Reader        as Reader
+import qualified Control.Monad.Trans.RWS.Lazy      as RWS.Lazy
+import qualified Control.Monad.Trans.RWS.Strict    as RWS.Strict
+import qualified Control.Monad.Trans.State.Lazy    as State.Lazy
+import qualified Control.Monad.Trans.State.Strict  as State.Strict
+import qualified Control.Monad.Trans.Writer.Lazy   as Writer.Lazy
+import qualified Control.Monad.Trans.Writer.Strict as Writer.Strict
 
 -- | A managed resource that you acquire using `with`
 newtype Managed a = Managed { (>>-) :: forall r . (a -> IO r) -> IO r }
@@ -178,6 +192,54 @@ instance Floating a => Floating (Managed a) where
     acosh = fmap acosh
     (**)    = liftA2 (**)
     logBase = liftA2 logBase
+
+{-| You can embed a `Managed` action within any `Monad` that implements
+    `MonadManaged` by using the `liftManaged` function
+
+    All instances must obey the following two laws:
+
+> liftManaged (return x) = return x
+>
+> liftManaged (m >>= f) = liftManaged m >>= \x -> liftManaged (f x)
+-}
+class MonadIO m => MonadManaged m where
+    liftManaged :: Managed a -> m a
+
+instance MonadManaged Managed where
+    liftManaged = id
+
+instance MonadManaged m => MonadManaged (Cont.ContT r m) where
+    liftManaged m = lift (liftManaged m)
+
+instance MonadManaged m => MonadManaged (Except.ExceptT e m) where
+    liftManaged m = lift (liftManaged m)
+
+instance MonadManaged m => MonadManaged (Identity.IdentityT m) where
+    liftManaged m = lift (liftManaged m)
+
+instance MonadManaged m => MonadManaged (Maybe.MaybeT m) where
+    liftManaged m = lift (liftManaged m)
+
+instance MonadManaged m => MonadManaged (Reader.ReaderT r m) where
+    liftManaged m = lift (liftManaged m)
+
+instance (Monoid w, MonadManaged m) => MonadManaged (RWS.Lazy.RWST r w s m) where
+    liftManaged m = lift (liftManaged m)
+
+instance (Monoid w, MonadManaged m) => MonadManaged (RWS.Strict.RWST r w s m) where
+    liftManaged m = lift (liftManaged m)
+
+instance MonadManaged m => MonadManaged (State.Strict.StateT s m) where
+    liftManaged m = lift (liftManaged m)
+
+instance MonadManaged m => MonadManaged (State.Lazy.StateT s m) where
+    liftManaged m = lift (liftManaged m)
+
+instance (Monoid w, MonadManaged m) => MonadManaged (Writer.Strict.WriterT w m) where
+    liftManaged m = lift (liftManaged m)
+
+instance (Monoid w, MonadManaged m) => MonadManaged (Writer.Lazy.WriterT w m) where
+    liftManaged m = lift (liftManaged m)
 
 -- | Build a `Managed` value
 managed :: (forall r . (a -> IO r) -> IO r) -> Managed a
