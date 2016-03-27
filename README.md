@@ -1,4 +1,4 @@
-# managed v1.0.1
+# managed v1.0.3
 
 This library contains the `Managed` monad, which is a small building block for
 wrapping resources that you acquire in an exception-safe way using a callback.
