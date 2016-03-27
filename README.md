@@ -29,9 +29,9 @@ to split this type out into a small and separate library.
 
 ## Quick Example
 
-Install the [Haskell Platform](http://www.haskell.org/platform/) and run:
+Install [`stack`](http://haskellstack.org/) and run:
 
-    $ cabal install managed pipes
+    $ stack install managed pipes
 
 Then compile and run the following small program which copies `"inFile.txt"` to
 `"outFile.txt"`:
@@ -46,6 +46,15 @@ main = runManaged $ do
     hIn  <- managed (withFile "inFile.txt" ReadMode)
     hOut <- managed (withFile "outFile.txt" WriteMode)
     liftIO $ runEffect $ Pipes.fromHandle hIn >-> Pipes.toHandle hOut
+```
+
+```bash
+$ stack ghc -- -O2 example.hs
+$ cat inFile.txt
+ABC
+$ ./example
+$ cat outFile.txt
+ABC
 ```
 
 Read the documentation in the `Control.Monad.Managed` module to learn more about
