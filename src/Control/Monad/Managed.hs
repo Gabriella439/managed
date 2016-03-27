@@ -194,52 +194,52 @@ instance Floating a => Floating (Managed a) where
     logBase = liftA2 logBase
 
 {-| You can embed a `Managed` action within any `Monad` that implements
-    `MonadManaged` by using the `liftManaged` function
+    `MonadManaged` by using the `using` function
 
     All instances must obey the following two laws:
 
-> liftManaged (return x) = return x
+> using (return x) = return x
 >
-> liftManaged (m >>= f) = liftManaged m >>= \x -> liftManaged (f x)
+> using (m >>= f) = using m >>= \x -> using (f x)
 -}
 class MonadIO m => MonadManaged m where
-    liftManaged :: Managed a -> m a
+    using :: Managed a -> m a
 
 instance MonadManaged Managed where
-    liftManaged = id
+    using = id
 
 instance MonadManaged m => MonadManaged (Cont.ContT r m) where
-    liftManaged m = lift (liftManaged m)
+    using m = lift (using m)
 
 instance MonadManaged m => MonadManaged (Except.ExceptT e m) where
-    liftManaged m = lift (liftManaged m)
+    using m = lift (using m)
 
 instance MonadManaged m => MonadManaged (Identity.IdentityT m) where
-    liftManaged m = lift (liftManaged m)
+    using m = lift (using m)
 
 instance MonadManaged m => MonadManaged (Maybe.MaybeT m) where
-    liftManaged m = lift (liftManaged m)
+    using m = lift (using m)
 
 instance MonadManaged m => MonadManaged (Reader.ReaderT r m) where
-    liftManaged m = lift (liftManaged m)
+    using m = lift (using m)
 
 instance (Monoid w, MonadManaged m) => MonadManaged (RWS.Lazy.RWST r w s m) where
-    liftManaged m = lift (liftManaged m)
+    using m = lift (using m)
 
 instance (Monoid w, MonadManaged m) => MonadManaged (RWS.Strict.RWST r w s m) where
-    liftManaged m = lift (liftManaged m)
+    using m = lift (using m)
 
 instance MonadManaged m => MonadManaged (State.Strict.StateT s m) where
-    liftManaged m = lift (liftManaged m)
+    using m = lift (using m)
 
 instance MonadManaged m => MonadManaged (State.Lazy.StateT s m) where
-    liftManaged m = lift (liftManaged m)
+    using m = lift (using m)
 
 instance (Monoid w, MonadManaged m) => MonadManaged (Writer.Strict.WriterT w m) where
-    liftManaged m = lift (liftManaged m)
+    using m = lift (using m)
 
 instance (Monoid w, MonadManaged m) => MonadManaged (Writer.Lazy.WriterT w m) where
-    liftManaged m = lift (liftManaged m)
+    using m = lift (using m)
 
 -- | Build a `Managed` value
 managed :: (forall r . (a -> IO r) -> IO r) -> Managed a
