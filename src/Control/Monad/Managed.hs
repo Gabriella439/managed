@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP        #-}
 {-# LANGUAGE RankNTypes #-}
 
 {-| An example Haskell program to copy data from one handle to another might
@@ -112,7 +113,9 @@ import Control.Monad.Trans.Class (lift)
 import Data.Monoid (Monoid(mempty, mappend))
 
 import qualified Control.Monad.Trans.Cont          as Cont
+#if MIN_VERSION_transformers(0,4,0)
 import qualified Control.Monad.Trans.Except        as Except
+#endif
 import qualified Control.Monad.Trans.Identity      as Identity
 import qualified Control.Monad.Trans.Maybe         as Maybe
 import qualified Control.Monad.Trans.Reader        as Reader
@@ -211,8 +214,10 @@ instance MonadManaged Managed where
 instance MonadManaged m => MonadManaged (Cont.ContT r m) where
     using m = lift (using m)
 
+#if MIN_VERSION_transformers(0,4,0)
 instance MonadManaged m => MonadManaged (Except.ExceptT e m) where
     using m = lift (using m)
+#endif
 
 instance MonadManaged m => MonadManaged (Identity.IdentityT m) where
     using m = lift (using m)
