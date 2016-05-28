@@ -38,4 +38,4 @@ Library
     Exposed-Modules:
         Control.Monad.Managed,
         Control.Monad.Managed.Safe
-    GHC-Options: -O2 -Wall
+    GHC-Options: -Wall
