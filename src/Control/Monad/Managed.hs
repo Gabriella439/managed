@@ -107,10 +107,15 @@ module Control.Monad.Managed (
     module Control.Monad.IO.Class
     ) where
 
-import Control.Applicative (Applicative(pure, (<*>)), liftA2)
 import Control.Monad.IO.Class (MonadIO(liftIO))
 import Control.Monad.Trans.Class (lift)
-import Data.Monoid (Monoid(mempty, mappend))
+
+#if MIN_VERSION_base(4,8,0)
+import Control.Applicative (liftA2)
+#else
+import Control.Applicative
+import Data.Monoid
+#endif
 
 import qualified Control.Monad.Trans.Cont          as Cont
 #if MIN_VERSION_transformers(0,4,0)
