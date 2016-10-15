@@ -259,7 +259,30 @@ managed = Managed
 managed_ :: (forall r. IO r -> IO r) -> Managed ()
 managed_ f = managed $ \g -> f $ g ()
 
--- | Acquire a `Managed` value
+{-| Acquire a `Managed` value
+
+    This is a potentially unsafe function since it allows a resource to escape
+    its scope.  For example, you might use `Managed` to safely acquire a
+    file handle, like this:
+
+> import qualified System.IO as IO
+>
+> example :: Managed Handle
+> example = managed (IO.withFile "foo.txt" IO.ReadMode)
+
+    ... and if you never used the `with` function then you would never run the
+    risk of accessing the `Handle` after the file was closed.  However, if you
+    use `with` then you can incorrectly access the handle after the handle is
+    closed, like this:
+
+> bad :: IO ()
+> bad = do
+>     handle <- with example return
+>     IO.hPutStrLn handle "bar"  -- This will fail because the handle is closed
+
+    ... so only use `with` if you know what you are doing and you're returning
+    a value that is not a resource being managed.
+-}
 with :: Managed a -> (a -> IO r) -> IO r
 with = (>>-)
 
