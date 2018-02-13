@@ -80,7 +80,7 @@
 
 > import Control.Monad
 > import Control.Monad.Managed
-> 
+>
 > main = runManaged (forever (liftIO (print 1)))
 
     If you need to acquire a resource for a long-lived loop, you can instead
@@ -114,7 +114,11 @@ import Control.Monad.Trans.Class (lift)
 import Control.Applicative (liftA2)
 #else
 import Control.Applicative
-import Data.Monoid
+import Data.Monoid (Monoid(..))
+#endif
+
+#if !(MIN_VERSION_base(4,11,0))
+import Data.Semigroup (Semigroup(..))
 #endif
 
 import qualified Control.Monad.Trans.Cont          as Cont
@@ -162,10 +166,15 @@ instance MonadIO Managed where
         a <- m
         return_ a )
 
+instance Semigroup a => Semigroup (Managed a) where
+    (<>) = liftA2 (<>)
+
 instance Monoid a => Monoid (Managed a) where
     mempty = pure mempty
 
+#if !(MIN_VERSION_base(4,11,0))
     mappend = liftA2 mappend
+#endif
 
 instance Num a => Num (Managed a) where
     fromInteger = pure . fromInteger
