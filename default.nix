@@ -1,7 +1,7 @@
 { mkDerivation, base, stdenv, transformers }:
 mkDerivation {
   pname = "managed";
-  version = "1.0.6";
+  version = "1.0.7";
   src = ./.;
   libraryHaskellDepends = [ base transformers ];
   description = "A monad for managed values";
