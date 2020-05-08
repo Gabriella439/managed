@@ -139,7 +139,7 @@ import qualified Control.Monad.Trans.Writer.Lazy   as Writer.Lazy
 import qualified Control.Monad.Trans.Writer.Strict as Writer.Strict
 
 -- | A managed resource that you acquire using `with`
-newtype Managed a = Managed { (>>-) :: forall r . (a -> IO r) -> IO r }
+newtype Managed a = Managed { (>>-) :: forall m r. (MonadIO m, MonadFail m) => (a -> m r) -> m r }
 
 instance Functor Managed where
     fmap f mx = Managed (\return_ ->
@@ -166,7 +166,7 @@ instance Monad Managed where
 
 instance MonadIO Managed where
     liftIO m = Managed (\return_ -> do
-        a <- m
+        a <- liftIO m
         return_ a )
 
 #if MIN_VERSION_base(4,9,0)
@@ -271,11 +271,11 @@ instance (Monoid w, MonadManaged m) => MonadManaged (Writer.Lazy.WriterT w m) wh
     using m = lift (using m)
 
 -- | Build a `Managed` value
-managed :: MonadManaged m => (forall r . (a -> IO r) -> IO r) -> m a
+managed :: MonadManaged m => (forall io r. MonadIO io => (a -> io r) -> io r) -> m a
 managed f = using (Managed f)
 
 -- | Like 'managed' but for resource-less operations.
-managed_ :: MonadManaged m => (forall r. IO r -> IO r) -> m ()
+managed_ :: MonadManaged m => (forall io r. MonadIO io => io r -> io r) -> m ()
 managed_ f = managed $ \g -> f $ g ()
 
 {-| Acquire a `Managed` value
@@ -302,11 +302,11 @@ managed_ f = managed $ \g -> f $ g ()
     ... so only use `with` if you know what you are doing and you're returning
     a value that is not a resource being managed.
 -}
-with :: Managed a -> (a -> IO r) -> IO r
+with :: (MonadIO m, MonadFail m) => Managed a -> (a -> m r) -> m r
 with = (>>-)
 
 -- | Run a `Managed` computation, enforcing that no acquired resources leak
-runManaged :: Managed () -> IO ()
+runManaged :: (MonadIO m, MonadFail m) => Managed () -> m ()
 runManaged m = m >>- return
 
 {- $reexports
