@@ -271,11 +271,11 @@ instance (Monoid w, MonadManaged m) => MonadManaged (Writer.Lazy.WriterT w m) wh
     using m = lift (using m)
 
 -- | Build a `Managed` value
-managed :: (forall r . (a -> IO r) -> IO r) -> Managed a
-managed = Managed
+managed :: MonadManaged m => (forall r . (a -> IO r) -> IO r) -> m a
+managed f = using (Managed f)
 
 -- | Like 'managed' but for resource-less operations.
-managed_ :: (forall r. IO r -> IO r) -> Managed ()
+managed_ :: MonadManaged m => (forall r. IO r -> IO r) -> m ()
 managed_ f = managed $ \g -> f $ g ()
 
 {-| Acquire a `Managed` value
