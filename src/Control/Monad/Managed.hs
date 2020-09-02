@@ -303,7 +303,7 @@ managed_ f = managed $ \g -> f $ g ()
     a value that is not a resource being managed.
 -}
 with :: Managed a -> (a -> IO r) -> IO r
-with = (>>-)
+with m = (>>-) m
 
 -- | Run a `Managed` computation, enforcing that no acquired resources leak
 runManaged :: Managed () -> IO ()
