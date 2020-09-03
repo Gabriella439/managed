@@ -1,6 +1,6 @@
 Name: managed
 Version: 1.0.8
-Cabal-Version: >=1.8.0.2
+Cabal-Version: >=1.10
 Build-Type: Simple
 License: BSD3
 License-File: LICENSE
@@ -42,3 +42,4 @@ Library
         Control.Monad.Managed,
         Control.Monad.Managed.Safe
     GHC-Options: -Wall
+    Default-Language: Haskell2010
