@@ -49,7 +49,7 @@ Library
         transformers      >= 0.2.0.0 && < 0.7
     if !impl(ghc >= 8.0)
       Build-Depends:
-        semigroups        >= 0.16    && < 0.19
+        semigroups        >= 0.16    && < 0.21
     Exposed-Modules:
         Control.Monad.Managed,
         Control.Monad.Managed.Safe
