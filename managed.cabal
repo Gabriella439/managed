@@ -7,7 +7,19 @@ License-File: LICENSE
 Copyright: 2014 Gabriel Gonzalez
 Author: Gabriel Gonzalez
 Maintainer: Gabriel439@gmail.com
-Tested-With: GHC == 7.6.3, GHC == 7.8.4, GHC == 7.10.2, GHC == 8.0.1
+Tested-With:
+    GHC == 9.2.1
+    GHC == 9.0.1
+    GHC == 8.10.7
+    GHC == 8.8.4
+    GHC == 8.6.5
+    GHC == 8.4.4
+    GHC == 8.2.2
+    GHC == 8.0.2
+    GHC == 7.10.3
+    GHC == 7.8.4
+    GHC == 7.6.3
+    GHC == 7.4.2
 Bug-Reports: https://github.com/Gabriel439/Haskell-Managed-Library/issues
 Synopsis: A monad for managed values
 Description: In Haskell you very often acquire values using the @with...@
@@ -34,10 +46,10 @@ Library
     Hs-Source-Dirs: src
     Build-Depends:
         base              >= 4.5     && < 5  ,
-        transformers      >= 0.2.0.0 && < 0.6
+        transformers      >= 0.2.0.0 && < 0.7
     if !impl(ghc >= 8.0)
       Build-Depends:
-        semigroups        >= 0.16    && < 0.19
+        semigroups        >= 0.16    && < 0.21
     Exposed-Modules:
         Control.Monad.Managed,
         Control.Monad.Managed.Safe
