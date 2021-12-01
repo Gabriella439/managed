@@ -156,9 +156,6 @@ instance Applicative Managed where
         return_ (f x) )
 
 instance Monad Managed where
-    return r = Managed (\return_ ->
-        return_ r )
-
     ma >>= f = Managed (\return_ ->
         ma  >>- \a ->
         f a >>- \b ->
