@@ -1,15 +1,15 @@
 let
-  config = {
-    packageOverrides = pkgs: {
-      haskellPackages = pkgs.haskellPackages.override {
-        overrides = haskellPackagesNew: haskellPackagesOld: {
-          managed = haskellPackagesNew.callPackage ./default.nix { };
-        };
-      };
-    };
+  overlay = pkgsNew: pkgsOld: {
+    haskellPackages = pkgsOld.haskellPackages.override (old: {
+      overrides =
+        pkgsNew.lib.composeExtensions (old.overrides or (_: _: { }))
+          (pkgsNew.haskell.lib.packageSourceOverrides {
+            managed = ./.;
+          });
+    });
   };
 
-  pkgs = import <nixpkgs> { inherit config; };
+  pkgs = import <nixpkgs> { config = { }; overlays = [ overlay ]; };
 
 in
   { inherit (pkgs.haskellPackages) managed;
