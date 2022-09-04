@@ -4,9 +4,9 @@ Cabal-Version: >=1.10
 Build-Type: Simple
 License: BSD3
 License-File: LICENSE
-Copyright: 2014 Gabriel Gonzalez
-Author: Gabriel Gonzalez
-Maintainer: Gabriel439@gmail.com
+Copyright: 2014 Gabriella Gonzalez
+Author: Gabriella Gonzalez
+Maintainer: GenuineGabriella@gmail.com
 Tested-With:
     GHC == 9.2.1
     GHC == 9.0.1
@@ -17,7 +17,7 @@ Tested-With:
     GHC == 8.2.2
     GHC == 8.0.2
     GHC == 7.10.3
-Bug-Reports: https://github.com/Gabriel439/Haskell-Managed-Library/issues
+Bug-Reports: https://github.com/Gabriella439/Haskell-Managed-Library/issues
 Synopsis: A monad for managed values
 Description: In Haskell you very often acquire values using the @with...@
   idiom using functions of type @(a -> IO r) -> IO r@.  This idiom forms a
@@ -37,7 +37,7 @@ Description: In Haskell you very often acquire values using the @with...@
 Category: Control
 Source-Repository head
     Type: git
-    Location: https://github.com/Gabriel439/Haskell-Managed-Library
+    Location: https://github.com/Gabriella439/Haskell-Managed-Library
 
 Library
     Hs-Source-Dirs: src
