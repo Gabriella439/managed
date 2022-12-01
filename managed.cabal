@@ -17,7 +17,7 @@ Tested-With:
     GHC == 8.2.2
     GHC == 8.0.2
     GHC == 7.10.3
-Bug-Reports: https://github.com/Gabriella439/Haskell-Managed-Library/issues
+Bug-Reports: https://github.com/Gabriella439/managed/issues
 Synopsis: A monad for managed values
 Description: In Haskell you very often acquire values using the @with...@
   idiom using functions of type @(a -> IO r) -> IO r@.  This idiom forms a
@@ -37,7 +37,7 @@ Description: In Haskell you very often acquire values using the @with...@
 Category: Control
 Source-Repository head
     Type: git
-    Location: https://github.com/Gabriella439/Haskell-Managed-Library
+    Location: https://github.com/Gabriella439/managed
 
 Library
     Hs-Source-Dirs: src
