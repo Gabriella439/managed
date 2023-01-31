@@ -99,6 +99,7 @@ module Control.Monad.Managed (
     MonadManaged(..),
     managed,
     managed_,
+    defer,
     with,
     runManaged,
 
@@ -274,6 +275,17 @@ managed f = using (Managed f)
 -- | Like 'managed' but for resource-less operations.
 managed_ :: MonadManaged m => (forall r. IO r -> IO r) -> m ()
 managed_ f = managed $ \g -> f $ g ()
+
+{-| Defer running an action until exit (via `runManaged`).
+
+For example, the following code will print \"Hello\" followed by \"Goodbye\":
+
+> runManaged $ do
+>   defer $ liftIO $ putStrLn "Goodbye"
+>   liftIO $ putStrLn "Hello"
+-}
+defer :: MonadManaged m => IO r -> m ()
+defer m = managed_ (<* m)
 
 {-| Acquire a `Managed` value
 
