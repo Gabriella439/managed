@@ -16,7 +16,6 @@ Tested-With:
     GHC == 8.4.4
     GHC == 8.2.2
     GHC == 8.0.2
-    GHC == 7.10.3
 Bug-Reports: https://github.com/Gabriella439/managed/issues
 Synopsis: A monad for managed values
 Description: In Haskell you very often acquire values using the @with...@
