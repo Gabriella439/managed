@@ -16,7 +16,6 @@ Tested-With:
     GHC == 8.4.4
     GHC == 8.2.2
     GHC == 8.0.2
-    GHC == 7.10.3
 Bug-Reports: https://github.com/Gabriella439/managed/issues
 Synopsis: A monad for managed values
 Description: In Haskell you very often acquire values using the @with...@
@@ -42,11 +41,8 @@ Source-Repository head
 Library
     Hs-Source-Dirs: src
     Build-Depends:
-        base              >= 4.8     && < 5  ,
+        base              >= 4.9     && < 5  ,
         transformers      >= 0.2.0.0 && < 0.7
-    if !impl(ghc >= 8.0)
-      Build-Depends:
-        semigroups        >= 0.16    && < 0.21
     Exposed-Modules:
         Control.Monad.Managed,
         Control.Monad.Managed.Safe
