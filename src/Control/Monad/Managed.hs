@@ -109,17 +109,10 @@ module Control.Monad.Managed (
     ) where
 
 import Control.Monad.IO.Class (MonadIO(liftIO))
-#if MIN_VERSION_base(4,9,0)
 import Control.Monad.Fail as MonadFail (MonadFail(..))
-#endif
 import Control.Monad.Trans.Class (lift)
 
-#if MIN_VERSION_base(4,8,0)
 import Control.Applicative (liftA2)
-#else
-import Control.Applicative
-import Data.Monoid (Monoid(..))
-#endif
 
 #if !(MIN_VERSION_base(4,11,0))
 import Data.Semigroup (Semigroup(..))
@@ -167,12 +160,10 @@ instance MonadIO Managed where
         a <- m
         return_ a )
 
-#if MIN_VERSION_base(4,9,0)
 instance MonadFail Managed where
     fail s = Managed (\return_ -> do
         a <- MonadFail.fail s
         return_ a )
-#endif
 
 instance Semigroup a => Semigroup (Managed a) where
     (<>) = liftA2 (<>)
